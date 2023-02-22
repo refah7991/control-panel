@@ -4,11 +4,14 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 module.exports = {
-	entry: './src/index.js',
+	entry:{
+	'app': './src/index.js',
+	'assests/js/banner':'.src/assets/js/banner.js',
+},
 	output: {
 		publicPath: '/',
 		path: path.resolve(__dirname, '/app'),
-		filename: 'app.js'
+		filename: '[name].js'
 	},
 	devServer: {
 		static: path.join(__dirname, '/app'),
@@ -25,17 +28,27 @@ module.exports = {
 				test: /\.html$/i,
 				loader: 'html-loader'
 			},
-			// rules داخل مصفوفة واحدة تسمى  rules لاحظ طيف مضع الـ 
+			// rules داخل مصفوفة واحدة تسمى  rules  طيف مضع الـ 
 			{
 				test: /\.(sass|css|scss)$/,
 				use: [
-					// MiniCssExtractPlugin كان لديك خطأ املاءي في اسم الحزمة 
+					
 					MiniCssExtractPlugin.loader,
 					'css-loader',
 					'postcss-loader',
 					'sass-loader'
 				]
 			},{
+				test: /\.m?js$/,
+				exclude: /node_modules/,
+				use: {
+				  loader: "babel-loader",
+				  options: {
+					presets: ['@babel/preset-env']
+				  }
+				}
+			  },{
+			
 
 				test: /\.(svg|eot|woff|woff2|ttf)$/,
 		
@@ -63,7 +76,7 @@ module.exports = {
 		],
 
 	},
-	// plugins داخل مصفوفة واحدة تحمل الاسم  plugin يجب ان تضع جميع الـ 
+	// plugins داخل مصفوفة واحدة تحمل الاسم  plugin  تضع جميع الـ 
 	plugins: [
 		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
@@ -73,7 +86,26 @@ module.exports = {
 		new OptimizeCSSAssetsPlugin({}),
 		new MiniCssExtractPlugin({
 			filename: "assets/css/style.css"
-		})
+		}),
+		new HtmlWebpackPlugin({
+			filename: "components/Button.html",
+			template: "./src/components/Button.html",
+	        chunks:['app']
+		  }),new HtmlWebpackPlugin({
+			filename: "components/textfield.html",
+			template: "./src/components/textfield.html",
+			chunks:['app']
+		  }),
+		  new HtmlWebpackPlugin({
+			filename: "components/card.html",
+			template: "./src/components/card.html",
+			chunks:['app']
+		  }),
+		  new HtmlWebpackPlugin({
+			filename: "components/banner.html",
+			template: "./src/components/banner.html",
+			chunks:['app']
+		  }),
 	],
 
 }

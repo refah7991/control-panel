@@ -1,9 +1,22 @@
-import './assest/sass/styles.scss';
+import './assets/sass/styles.scss';
 
 console.log("hello from webpack");
 
-var student = require("./studentname");
-var student1 =new student("Noor", "Hilles");
 
 
-setTimeout(  ()=> alert("hello student!"), 4000);
+
+(function () {
+    const closeBanners= document.querySelectorAll(".js-banner__close");
+    closeBanners.forEach( closeBanner => {
+        closeBanner.addEventListener("click", event => {
+            const banner= event.target.parentNode;
+            banner.classList.add("collapse");
+
+            banner.addEventListener("transitionend", function(event) {
+                if (event.target === this) {
+                  this.remove();
+                }
+            })
+        })
+    })
+})();
